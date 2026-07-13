@@ -10,6 +10,97 @@ Linux/macOS 无图形界面的 v2rayN 命令行与全屏终端客户端，支持
 
 [![v2rayN-cli TUI 界面预览](docs/v2rayn-cli-tui-preview.png)](docs/v2rayn-cli-tui-preview.png)
 
+## 使用 Release 包安装（推荐）
+
+Release 包已经包含 .NET 运行环境和对应平台的代理核心，普通用户不需要安装 .NET，也不需要编译源码。
+
+先进入 [GitHub Releases](https://github.com/Ryderwe/v2rayN-cli/releases/latest)，根据系统和 CPU 下载对应的压缩包：
+
+| 系统 | CPU | 下载文件后缀 |
+| --- | --- | --- |
+| macOS | Apple Silicon（M1/M2/M3/M4/M5） | `osx-arm64.tar.gz` |
+| macOS | Intel | `osx-x64.tar.gz` |
+| Linux | Intel/AMD 64 位 | `linux-x64.tar.gz` |
+| Linux | ARM64/AArch64 | `linux-arm64.tar.gz` |
+
+不确定 CPU 架构时可以执行：
+
+```bash
+uname -m
+```
+
+输出 `arm64` 或 `aarch64` 时选择 ARM64；输出 `x86_64` 时选择 x64。
+
+### 解压并直接启动
+
+下面以 `v2rayN-cli-7.23.4-osx-arm64.tar.gz` 为例，请把 `PACKAGE` 改成实际下载的文件名：
+
+```bash
+cd "$HOME/Downloads"
+PACKAGE="v2rayN-cli-7.23.4-osx-arm64.tar.gz"
+
+tar -xzf "$PACKAGE"
+cd "${PACKAGE%.tar.gz}"
+chmod +x v2rayN-cli
+./v2rayN-cli ui
+```
+
+macOS 如果提示程序来自身份不明的开发者，可以清除下载隔离标记后重新启动：
+
+```bash
+xattr -dr com.apple.quarantine .
+./v2rayN-cli ui
+```
+
+### 安装为全局命令
+
+如果希望在任意目录直接运行 `v2rayN-cli`：
+
+```bash
+cd "$HOME/Downloads"
+PACKAGE="v2rayN-cli-7.23.4-osx-arm64.tar.gz" # 改成实际下载的文件名
+INSTALL_DIR="$HOME/.local/share/v2rayN-cli"
+
+mkdir -p "$INSTALL_DIR" "$HOME/.local/bin"
+tar -xzf "$PACKAGE" -C "$INSTALL_DIR" --strip-components=1
+chmod +x "$INSTALL_DIR/v2rayN-cli"
+ln -sf "$INSTALL_DIR/v2rayN-cli" "$HOME/.local/bin/v2rayN-cli"
+```
+
+将命令目录加入 `PATH`。macOS 默认使用 Zsh：
+
+```bash
+grep -q 'HOME/.local/bin' "$HOME/.zshrc" 2>/dev/null || \
+  echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$HOME/.zshrc"
+source "$HOME/.zshrc"
+```
+
+Linux 使用 Bash 时：
+
+```bash
+grep -q 'HOME/.local/bin' "$HOME/.bashrc" 2>/dev/null || \
+  echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$HOME/.bashrc"
+source "$HOME/.bashrc"
+```
+
+安装完成后启动全屏终端界面：
+
+```bash
+v2rayN-cli ui
+```
+
+在“节点”或“订阅”页面按 `a` 可以添加节点或导入订阅；按 `Space` 选择节点，按 `s` 启动代理，按 `l` 切换中文/英文。默认 SOCKS5/HTTP 混合代理地址为 `127.0.0.1:10808`。
+
+也可以完全使用命令行：
+
+```bash
+v2rayN-cli subs add 'https://example.com/subscription' --name my-sub --update
+v2rayN-cli nodes list
+v2rayN-cli nodes select '节点ID前缀'
+v2rayN-cli start
+v2rayN-cli status
+```
+
 ## 安装 .NET 10 SDK
 
 > 只有从源码构建 `v2rayN-cli` 时才需要安装 .NET 10 SDK。通过 Release 下载的自包含程序不需要安装 .NET。
