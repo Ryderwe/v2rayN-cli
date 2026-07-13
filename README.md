@@ -6,10 +6,62 @@ Linux/macOS 无图形界面的 v2rayN 命令行与全屏终端客户端，支持
 
 [![v2rayN-cli TUI 界面预览](docs/v2rayn-cli-tui-preview.png)](docs/v2rayn-cli-tui-preview.png)
 
+## 安装 .NET 10 SDK
+
+> 只有从源码构建 `v2rayN-cli` 时才需要安装 .NET 10 SDK。通过 Release 下载的自包含程序不需要安装 .NET。
+
+macOS 和 Linux 都可以使用微软官方安装脚本：
+
 ```bash
+curl -fsSL https://dot.net/v1/dotnet-install.sh -o /tmp/dotnet-install.sh
+bash /tmp/dotnet-install.sh --channel 10.0 --install-dir "$HOME/.dotnet"
+```
+
+让当前终端立即生效：
+
+```bash
+export DOTNET_ROOT="$HOME/.dotnet"
+export PATH="$DOTNET_ROOT:$PATH"
+dotnet --version
+```
+
+如果使用 macOS 默认的 Zsh，将环境变量永久写入 `~/.zshrc`：
+
+```bash
+grep -q 'DOTNET_ROOT="$HOME/.dotnet"' "$HOME/.zshrc" 2>/dev/null || cat >> "$HOME/.zshrc" <<'EOF'
+
+export DOTNET_ROOT="$HOME/.dotnet"
+export PATH="$DOTNET_ROOT:$PATH"
+EOF
+
+source "$HOME/.zshrc"
+```
+
+如果 Linux 使用 Bash，将同样的配置写入 `~/.bashrc`：
+
+```bash
+grep -q 'DOTNET_ROOT="$HOME/.dotnet"' "$HOME/.bashrc" 2>/dev/null || cat >> "$HOME/.bashrc" <<'EOF'
+
+export DOTNET_ROOT="$HOME/.dotnet"
+export PATH="$DOTNET_ROOT:$PATH"
+EOF
+
+source "$HOME/.bashrc"
+```
+
+安装成功后，`dotnet --version` 应显示 `10.x`。
+
+## 从源码构建
+
+```bash
+git clone https://github.com/Ryderwe/v2rayN-cli.git
+cd v2rayN-cli
+
 ./package-cli.sh osx-arm64   # Apple Silicon macOS
 ./package-cli.sh linux-x64   # x86_64 Linux
-./v2rayN-cli ui
+
+# Apple Silicon 构建完成后启动
+./release-cli/v2rayN-cli-*-osx-arm64/v2rayN-cli ui
 ```
 
 完整的构建、安装和快捷键说明见 [v2rayN-cli 文档](v2rayN/v2rayN.Cli/README.md)。

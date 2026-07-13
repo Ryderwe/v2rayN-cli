@@ -26,6 +26,33 @@
 
 每个页面顶部都会显示当前可用操作，例如“添加/导入节点”“添加/导入订阅”“更新”“启用/禁用”等，不需要记忆快捷键。
 
+## 安装 .NET 10 SDK
+
+只有从源码构建时才需要 SDK；自包含发布包无需安装 .NET。
+
+```bash
+curl -fsSL https://dot.net/v1/dotnet-install.sh -o /tmp/dotnet-install.sh
+bash /tmp/dotnet-install.sh --channel 10.0 --install-dir "$HOME/.dotnet"
+
+export DOTNET_ROOT="$HOME/.dotnet"
+export PATH="$DOTNET_ROOT:$PATH"
+dotnet --version
+```
+
+macOS/Zsh 永久配置：
+
+```bash
+grep -q 'DOTNET_ROOT="$HOME/.dotnet"' "$HOME/.zshrc" 2>/dev/null || cat >> "$HOME/.zshrc" <<'EOF'
+
+export DOTNET_ROOT="$HOME/.dotnet"
+export PATH="$DOTNET_ROOT:$PATH"
+EOF
+
+source "$HOME/.zshrc"
+```
+
+Linux/Bash 将上面的 `~/.zshrc` 替换为 `~/.bashrc`，最后运行 `source ~/.bashrc`。安装成功后版本应为 `10.x`。
+
 ## 构建发布包
 
 需要 .NET 10 SDK、`curl`、`unzip` 和 `tar`：
