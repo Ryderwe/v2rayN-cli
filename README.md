@@ -14,6 +14,24 @@ Linux/macOS 无图形界面的 v2rayN 命令行与全屏终端客户端，支持
 
 Release 包已经包含 .NET 运行环境和对应平台的代理核心，普通用户不需要安装 .NET，也不需要编译源码。
 
+### 一键安装或更新
+
+在 macOS 或 Linux 终端中执行下面这一条命令。安装器会自动识别系统和 CPU、下载最新 Release、校验 SHA256、安装程序并配置全局命令：
+
+```bash
+(set -o pipefail; curl -fsSL https://raw.githubusercontent.com/Ryderwe/v2rayN-cli/master/install-cli.sh | bash) && export PATH="$HOME/.local/bin:$PATH"
+```
+
+安装完成后只需输入：
+
+```bash
+v2rayN-cli ui
+```
+
+以后需要升级时，重新执行同一条安装命令即可。程序配置和节点数据保存在用户数据目录中，升级不会删除它们。
+
+### 手动下载安装
+
 先进入 [GitHub Releases](https://github.com/Ryderwe/v2rayN-cli/releases/latest)，根据系统和 CPU 下载对应的压缩包：
 
 | 系统 | CPU | 下载文件后缀 |
