@@ -80,9 +80,9 @@ git push origin v7.23.4-cli.1
 也可以进入仓库的 **Actions → Release v2rayN-cli → Run workflow**，输入版本标签手动发布。
 
 仓库还提供 **Sync upstream and release** 工作流，每 6 小时检查一次
-[2dust/v2rayN](https://github.com/2dust/v2rayN) 的 `master` 分支。发现新提交后会自动合并到本仓库的
-`master`，构建四个平台安装包并创建 Release。也可以在 Actions 页面手动运行；启用
-`force_release` 后，即使上游没有新提交也会重新构建一个 Release。
+[2dust/v2rayN](https://github.com/2dust/v2rayN)。上游 `master` 有新提交时会自动合并到本仓库，
+但只有上游发布了新的 GitHub Release 时，才会构建四个平台安装包并创建本仓库的 Release。
+也可以在 Actions 页面手动运行；启用 `force_release` 后，可以针对当前上游 Release 强制重新构建。
 
 完整的构建、安装和快捷键说明见 [v2rayN-cli 文档](v2rayN/v2rayN.Cli/README.md)。
 
