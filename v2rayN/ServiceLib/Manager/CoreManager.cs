@@ -18,6 +18,9 @@ public class CoreManager
     private Func<bool, string, Task>? _updateFunc;
     private const string _tag = "CoreHandler";
 
+    public bool IsRunning => _processService is { HasExited: false };
+    public int? ProcessId => IsRunning ? _processService?.Id : null;
+
     public async Task Init(Config config, Func<bool, string, Task> updateFunc)
     {
         _config = config;

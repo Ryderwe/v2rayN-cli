@@ -1077,6 +1077,12 @@ public class Utils
 
     public static string StartupPath()
     {
+        var customDataDir = Environment.GetEnvironmentVariable(Global.CustomDataDir);
+        if (customDataDir.IsNotEmpty())
+        {
+            return Path.GetFullPath(Environment.ExpandEnvironmentVariables(customDataDir));
+        }
+
         if (Environment.GetEnvironmentVariable(Global.LocalAppData) == "1")
         {
             return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "v2rayN");

@@ -1,4 +1,18 @@
-# v2rayN
+# v2rayN-cli
+
+Linux/macOS 无图形界面的 v2rayN 命令行与全屏终端客户端，支持订阅链接、单节点、节点管理、配置编辑、实时日志和中英文 TUI。
+
+```bash
+./package-cli.sh osx-arm64   # Apple Silicon macOS
+./package-cli.sh linux-x64   # x86_64 Linux
+./v2rayN-cli ui
+```
+
+完整的构建、安装和快捷键说明见 [v2rayN-cli 文档](v2rayN/v2rayN.Cli/README.md)。
+
+本项目基于 [2dust/v2rayN](https://github.com/2dust/v2rayN) 开发并继续遵循 GPL-3.0 许可证。下方保留上游项目说明。
+
+## Upstream v2rayN
 
 ### A GUI client for Windows, Linux and macOS. Support [Xray](https://github.com/XTLS/Xray-core) and [sing-box](https://github.com/SagerNet/sing-box) and [others](https://github.com/2dust/v2rayN/wiki/List-of-supported-cores)
 
