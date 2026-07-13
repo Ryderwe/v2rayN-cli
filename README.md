@@ -2,6 +2,9 @@
 
 Linux/macOS 无图形界面的 v2rayN 命令行与全屏终端客户端，支持订阅链接、单节点、节点管理、配置编辑、实时日志和中英文 TUI。
 
+[![Release v2rayN-cli](https://github.com/Ryderwe/v2rayN-cli/actions/workflows/release-cli.yml/badge.svg)](https://github.com/Ryderwe/v2rayN-cli/actions/workflows/release-cli.yml)
+[![GitHub Release](https://img.shields.io/github/v/release/Ryderwe/v2rayN-cli?include_prereleases&amp;label=release)](https://github.com/Ryderwe/v2rayN-cli/releases)
+
 ## 界面预览
 
 [![v2rayN-cli TUI 界面预览](docs/v2rayn-cli-tui-preview.png)](docs/v2rayn-cli-tui-preview.png)
@@ -63,6 +66,17 @@ cd v2rayN-cli
 # Apple Silicon 构建完成后启动
 ./release-cli/v2rayN-cli-*-osx-arm64/v2rayN-cli ui
 ```
+
+## GitHub Actions 自动发布
+
+推送符合 `v*-cli.*` 格式的标签后，Actions 会自动构建 Linux/macOS 的 x64、ARM64 四个安装包，生成 `SHA256SUMS` 并创建 GitHub Release：
+
+```bash
+git tag -a v7.23.4-cli.1 -m "v2rayN-cli v7.23.4-cli.1"
+git push origin v7.23.4-cli.1
+```
+
+也可以进入仓库的 **Actions → Release v2rayN-cli → Run workflow**，输入版本标签手动发布。
 
 完整的构建、安装和快捷键说明见 [v2rayN-cli 文档](v2rayN/v2rayN.Cli/README.md)。
 
