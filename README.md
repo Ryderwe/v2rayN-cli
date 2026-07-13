@@ -2,6 +2,10 @@
 
 Linux/macOS 无图形界面的 v2rayN 命令行与全屏终端客户端，支持订阅链接、单节点、节点管理、配置编辑、实时日志和中英文 TUI。
 
+## 界面预览
+
+[![v2rayN-cli TUI 界面预览](docs/v2rayn-cli-tui-preview.png)](docs/v2rayn-cli-tui-preview.png)
+
 ```bash
 ./package-cli.sh osx-arm64   # Apple Silicon macOS
 ./package-cli.sh linux-x64   # x86_64 Linux
