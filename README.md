@@ -195,6 +195,14 @@ git push origin v7.23.4-cli.1
 
 完整的构建、安装和快捷键说明见 [v2rayN-cli 文档](v2rayN/v2rayN.Cli/README.md)。
 
+## 致谢
+
+<a href="https://linux.do">
+  <img src="https://cdn3.ldstatic.com/original/4X/d/6/5/d65def8cc0c413f318bee2bcd1c774bc4ad109a8.png" alt="LINUX DO" width="72">
+</a>
+
+感谢 [LINUX DO](https://linux.do)——新的理想型社区。
+
 本项目基于 [2dust/v2rayN](https://github.com/2dust/v2rayN) 开发并继续遵循 GPL-3.0 许可证。下方保留上游项目说明。
 
 ## Upstream v2rayN
