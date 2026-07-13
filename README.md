@@ -3,6 +3,7 @@
 Linux/macOS 无图形界面的 v2rayN 命令行与全屏终端客户端，支持订阅链接、单节点、节点管理、配置编辑、实时日志和中英文 TUI。
 
 [![Release v2rayN-cli](https://github.com/Ryderwe/v2rayN-cli/actions/workflows/release-cli.yml/badge.svg)](https://github.com/Ryderwe/v2rayN-cli/actions/workflows/release-cli.yml)
+[![Sync upstream](https://github.com/Ryderwe/v2rayN-cli/actions/workflows/sync-upstream-release.yml/badge.svg)](https://github.com/Ryderwe/v2rayN-cli/actions/workflows/sync-upstream-release.yml)
 [![GitHub Release](https://img.shields.io/github/v/release/Ryderwe/v2rayN-cli?include_prereleases&amp;label=release)](https://github.com/Ryderwe/v2rayN-cli/releases)
 
 ## 界面预览
@@ -77,6 +78,11 @@ git push origin v7.23.4-cli.1
 ```
 
 也可以进入仓库的 **Actions → Release v2rayN-cli → Run workflow**，输入版本标签手动发布。
+
+仓库还提供 **Sync upstream and release** 工作流，每 6 小时检查一次
+[2dust/v2rayN](https://github.com/2dust/v2rayN) 的 `master` 分支。发现新提交后会自动合并到本仓库的
+`master`，构建四个平台安装包并创建 Release。也可以在 Actions 页面手动运行；启用
+`force_release` 后，即使上游没有新提交也会重新构建一个 Release。
 
 完整的构建、安装和快捷键说明见 [v2rayN-cli 文档](v2rayN/v2rayN.Cli/README.md)。
 

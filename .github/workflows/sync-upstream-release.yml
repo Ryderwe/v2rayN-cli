@@ -1,0 +1,114 @@
+name: Sync upstream and release
+
+on:
+  schedule:
+    - cron: '17 */6 * * *'
+  workflow_dispatch:
+    inputs:
+      force_release:
+        description: 'Build a new Release even when upstream has not changed'
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-upstream-release
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    name: Sync 2dust/v2rayN
+    runs-on: ubuntu-latest
+    outputs:
+      should_release: ${{ steps.sync.outputs.should_release }}
+      release_tag: ${{ steps.sync.outputs.release_tag }}
+      sync_sha: ${{ steps.sync.outputs.sync_sha }}
+    steps:
+      - name: Checkout fork
+        uses: actions/checkout@v7
+        with:
+          ref: master
+          fetch-depth: 0
+
+      - name: Merge upstream changes
+        id: sync
+        shell: bash
+        env:
+          FORCE_RELEASE: ${{ inputs.force_release || 'false' }}
+          UPSTREAM_REPOSITORY: 2dust/v2rayN
+          UPSTREAM_BRANCH: master
+        run: |
+          set -euo pipefail
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git remote add upstream "https://github.com/${UPSTREAM_REPOSITORY}.git"
+          git fetch --no-tags upstream "${UPSTREAM_BRANCH}"
+
+          upstream_sha="$(git rev-parse "upstream/${UPSTREAM_BRANCH}")"
+          changed=false
+
+          if git merge-base --is-ancestor "$upstream_sha" HEAD; then
+            echo "The fork already contains upstream commit ${upstream_sha}."
+          else
+            echo "Merging upstream commit ${upstream_sha}."
+            if ! git merge --no-edit --no-ff "$upstream_sha"; then
+              git status --short
+              git merge --abort || true
+              echo "::error::Upstream merge failed. Resolve the conflict on master, then run this workflow again."
+              exit 1
+            fi
+            git push origin HEAD:master
+            changed=true
+          fi
+
+          sync_sha="$(git rev-parse HEAD)"
+          version="$(sed -n 's:.*<Version>\(.*\)</Version>.*:\1:p' v2rayN/Directory.Build.props | head -n1)"
+          if [[ -z "$version" ]]; then
+            echo "::error::Could not read the v2rayN version from v2rayN/Directory.Build.props."
+            exit 1
+          fi
+
+          upstream_short="${upstream_sha:0:8}"
+          should_release=false
+          release_tag=""
+
+          if [[ "$changed" == "true" ]]; then
+            should_release=true
+            release_tag="v${version}-cli.sync.g${upstream_short}"
+          elif [[ "$FORCE_RELEASE" == "true" ]]; then
+            should_release=true
+            release_tag="v${version}-cli.sync.g${upstream_short}.${GITHUB_RUN_NUMBER}"
+          fi
+
+          {
+            echo "should_release=${should_release}"
+            echo "release_tag=${release_tag}"
+            echo "sync_sha=${sync_sha}"
+          } >> "$GITHUB_OUTPUT"
+
+          {
+            echo "## Upstream sync"
+            echo
+            echo "- Upstream commit: \`${upstream_sha}\`"
+            echo "- Synced commit: \`${sync_sha}\`"
+            echo "- Upstream changed: \`${changed}\`"
+            echo "- Create Release: \`${should_release}\`"
+            if [[ -n "$release_tag" ]]; then
+              echo "- Release tag: \`${release_tag}\`"
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  release:
+    name: Build and publish synchronized source
+    needs: sync
+    if: needs.sync.outputs.should_release == 'true'
+    permissions:
+      contents: write
+    uses: ./.github/workflows/release-cli.yml
+    with:
+      release_tag: ${{ needs.sync.outputs.release_tag }}
+      checkout_ref: ${{ needs.sync.outputs.sync_sha }}
